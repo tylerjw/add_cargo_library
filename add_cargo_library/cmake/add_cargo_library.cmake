@@ -1,13 +1,15 @@
 function(add_cargo_library TARGET)
-    if (CMAKE_BUILD_TYPE STREQUAL "Debug")
-        set(CARGO_OPTS)
-        set(TARGET_DIR debug)
-    else ()
+    if (CMAKE_BUILD_TYPE STREQUAL "Release")
         set(CARGO_OPTS --release)
         set(TARGET_DIR release)
+    else ()
+        set(CARGO_OPTS)
+        set(TARGET_DIR debug)
     endif ()
 
     add_custom_command(
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/Cargo.toml
+        DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET}/src/lib.rs
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cxxbridge/${TARGET}/src/lib.rs.cc
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/cxxbridge/${TARGET}/src/lib.rs.h
         OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_DIR}/lib${TARGET}.a
